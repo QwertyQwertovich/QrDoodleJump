@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+	<head>
+		<title>DJump by Kharitonov Alexander</title>
+        <meta charset='utf-8' />
+	</head>
+	<body>
+		<canvas height='320' width='480' id='example'>Update the browser</canvas>
+		<script>
+			var example = document.getElementById("example"),
+			    ctx     = example.getContext('2d');
+			var a = new Array();
+			var b = new Array();
+			a=[48,96,144,192,240,288,336,384,432,480];
+			b=[32,64,96,128,160,192,224,256,288,320];
+			let x=300;
+			let y=0;
+			let pllen=20;
+			let plh=5;
+			let vel=-2;
+			let velx=0;
+			let isclick=false;
+			var add=0;
+			var score=0;
+			let high=0;
+			function mouse(){
+			  if (add>0){
+			  velx=2;
+			  }
+			  else{
+			    velx=-2;
+			  };
+			  /*isclick=false;*/
+			};
+			example.addEventListener('mousedown',function(e) {
+        var rect = example.getBoundingClientRect();
+        isclick=true;
+        add=((e.clientX-rect.x)/example.width-0.5)*5;
+			});
+			example.addEventListener('mouseup',function(e) {
+			  isclick=false;
+			});
+			setInterval(draw, 10);
+			function draw(){
+			  ctx.clearRect(0,0,example.width, example.height);
+			  ctx.fillStyle='green';
+			  ctx.fillRect(0, 0, example.width, example.height);
+			  ctx.fillStyle='red';
+			  ctx.beginPath();
+			  ctx.arc(x, y, 10, 0, Math.PI*2);
+			  ctx.fill();
+			  ctx.closePath();
+			  y=y+vel;
+			  x=x+velx;
+			  if(vel>10){
+			    vel=10;
+			  };
+			  if(y>example.height){
+			    if(score>high){
+			      high=score;
+			    };
+			    y=0;
+			    x=example.width/2;
+			    score=0;
+			    velx=0;
+			    vel=0;
+			  };
+			  score=score+1;
+			  ctx.fillText(score,10,10);
+			  ctx.fillText(high,10,20);
+			  if(x>example.width){
+			    x=0;
+			  };
+			  if(x<0){
+			    x=example.width;
+			  };
+			  vel=vel+0.1;
+			  if (isclick){
+			    mouse();
+			  };
+			  if (velx>0){
+			    velx=velx-0.1;
+			  };
+			  if (velx<0){
+			    velx=velx+0.1;
+			  };
+			  if (velx<0.1 && velx>-0.1){
+			    velx=0;
+			  };
+			  x=velx+x;
+			  for(var i=0; i<a.length; i++) {
+			    if(x-a[i]<pllen && x-a[i]>0-pllen && y-b[i]<plh && y-b[i]>0-plh){
+			      vel=0-vel;
+			    } ;
+			    ctx.fillRect(a[i]-pllen,b[i],pllen*2,plh);
+			    b[i]=b[i]+1;
+			    if(b[i]==example.height){
+			      b[i]=0;
+			      a[i]=gri(example.width);
+			    };
+			};
+			};
+			function gri(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      };
+		</script>
+		<text>Djump by Qwerty_Qwertovich(Alexander Kharitonov)</text>
+	</body>
+</html>
